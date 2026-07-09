@@ -1,0 +1,59 @@
+{
+    "name": "mmoollllee/laravel-consent-control",
+    "description": "GDPR cookie consent banner and content blocking for Laravel — server-rendered Blade on top of the framework-agnostic consent-control JS runtime.",
+    "keywords": ["laravel", "consent", "cookie", "gdpr", "privacy", "banner", "blade"],
+    "homepage": "https://github.com/mmoollllee/laravel-consent-control",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Moritz Graf",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.28|^12.0",
+        "illuminate/support": "^11.28|^12.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.5|^10.0",
+        "pestphp/pest": "^3.5",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mmoollllee\\LaravelConsentControl\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mmoollllee\\LaravelConsentControl\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "lint": "pint"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Mmoollllee\\LaravelConsentControl\\LaravelConsentControlServiceProvider"
+            ],
+            "aliases": {
+                "ConsentControl": "Mmoollllee\\LaravelConsentControl\\Facades\\ConsentControl"
+            }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
