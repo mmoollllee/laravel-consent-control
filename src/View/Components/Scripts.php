@@ -7,12 +7,20 @@ use Mmoollllee\LaravelConsentControl\ConsentControlManager;
 
 class Scripts extends Component
 {
+    /**
+     * Emit <link>/<script src> tags for the published runtime assets. Set false
+     * when you bundle the runtime + CSS yourself (Vite): the component then only
+     * emits the inline ConsentControl.init() boot config.
+     */
+    public bool $assets;
+
     public bool $standaloneCss;
 
     public array $initConfig;
 
-    public function __construct(bool $standaloneCss = true)
+    public function __construct(bool $standaloneCss = true, bool $assets = true)
     {
+        $this->assets = $assets;
         $this->standaloneCss = $standaloneCss;
         $this->initConfig = $this->buildInitConfig(app(ConsentControlManager::class));
     }

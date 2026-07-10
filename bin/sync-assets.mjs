@@ -8,8 +8,16 @@
  *
  * Defaults to a sibling checkout at ../consent-control. Build that package first
  * (`npm run build` there) so dist/ is current.
+ *
+ * Output:
+ *   dist/js/consent-control.js    – the runtime (npm bundle.min.js)
+ *   dist/css/consent-message.css  – overlay styling for blocked content; always
+ *                                   loaded by <x-consent-control-scripts>
+ *   dist/css/consent-control.css  – banner fallback for projects WITHOUT Tailwind
+ *                                   (from resources/css/consent-control-fallback.css);
+ *                                   the banner Blade itself is Tailwind-styled.
  */
-import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -24,12 +32,14 @@ copyFileSync(
     resolve(root, 'resources/dist/js/consent-control.js'),
 )
 
-// Concatenate the runtime CSS: banner layout + Bootstrap-free switch styling +
-// consent-message styling. Drop the bootstrap layer if your project uses Bootstrap.
-const css = ['consentcontrol.main.css', 'consentcontrol.bootstrap.css', 'consentmessage.main.css']
-    .map((file) => `/* ${file} */\n${readFileSync(resolve(src, file), 'utf8')}`)
-    .join('\n\n')
+copyFileSync(
+    resolve(src, 'consentmessage.main.css'),
+    resolve(root, 'resources/dist/css/consent-message.css'),
+)
 
-writeFileSync(resolve(root, 'resources/dist/css/consent-control.css'), css)
+copyFileSync(
+    resolve(root, 'resources/css/consent-control-fallback.css'),
+    resolve(root, 'resources/dist/css/consent-control.css'),
+)
 
 console.log(`Synced consent-control assets from ${src}`)

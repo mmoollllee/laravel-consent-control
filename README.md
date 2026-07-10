@@ -164,29 +164,74 @@ protected $casts = ['consent_settings' => 'array'];
 Editing that JSON with a ready-made Filament form is what
 [`filament-consent-control`](https://github.com/mmoollllee/filament-consent-control) adds.
 
-## Assets
+## Frontend assets (choose one)
 
-Two ways to ship the runtime:
+Render the banner and the boot component once per page (e.g. before `</body>`):
 
-**A) Vendored (default, no build step).** `vendor:publish --tag=consent-control-assets`
-copies the prebuilt JS/CSS to `public/vendor/consent-control`. `<x-consent-control-scripts />`
-references them.
-
-**B) Vite / your own bundler.** Install the runtime and import it:
-
-```bash
-npm i consent-control
+```blade
+<x-consent-control-banner />
+<x-consent-control-scripts :assets="false" />
 ```
+
+**The banner is designed to inherit your site's design** — pick the path that fits your setup:
+
+**A) Bundle it yourself — recommended.** The runtime JS and the overlay CSS become part of
+your Vite build (no extra requests, full control), and Tailwind styles the banner Blade: it
+adopts your design tokens (`gray` scale, the toggle uses your `--color-primary`) and your
+button components (`.btn`, `.btn-primary`, `.btn-secondary`) automatically.
 
 ```js
 // resources/js/app.js
-import 'consent-control';
-import 'consent-control/dist/consentcontrol.main.css';
+import '../../vendor/mmoollllee/laravel-consent-control/resources/dist/js/consent-control.js';
 ```
 
-Then render `<x-consent-control-scripts :standalone-css="false" />` (it still emits the
-`ConsentControl.init(...)` boot config; just skip the duplicate `<script>`/CSS by
-including only the inline boot — or call `ConsentControl.init()` yourself).
+```css
+/* resources/css/app.css */
+@import '../../vendor/mmoollllee/laravel-consent-control/resources/dist/css/consent-message.css';
+@source '../../vendor/mmoollllee/laravel-consent-control/resources/views/components/**/*.blade.php';
+```
+
+With `:assets="false"` the component emits only the inline `ConsentControl.init(...)` boot
+config. (Alternatively `npm i consent-control` and import from node_modules — same runtime.)
+
+**B) Published assets — no build step.** Publish the runtime and let the component load it:
+
+```bash
+php artisan vendor:publish --tag=consent-control-assets   # → public/vendor/consent-control
+```
+
+```blade
+<x-consent-control-scripts />
+```
+
+Tailwind projects still add the `@source` line above and pass `:standalone-css="false"`
+(the Blade styles the banner). Projects **without** a utility/button system keep the default:
+a small neutral stylesheet styles banner + overlay buttons and still adopts your brand where
+it can — the accent reads `--color-primary` / `--bs-primary`, and every `--cc-*` variable can
+be overridden:
+
+```css
+#consent-control-banner, .consent-message { --cc-primary: #b91c1c; }
+```
+
+**C) Full control.** Publish the views and make them yours — the runtime only needs its
+selector contract (`#consent-control-banner`, `input[value=<category>]`,
+`#consent-control--submit(-all)`, `.consent-control--open/--close/--reset`,
+`.collapsed-only`/`.uncollapsed-only` and the `hide`/`is-collapsed` state classes):
+
+```bash
+php artisan vendor:publish --tag=consent-control-views
+```
+
+## Reopening the banner
+
+Visitors must be able to change their choice later (GDPR). Place a button with the
+`consent-control--open` class anywhere — typically on the privacy policy page; the runtime
+binds every such element on init and reopens the banner with the settings expanded:
+
+```html
+<button type="button" class="consent-control--open">Cookie-Einstellungen ändern</button>
+```
 
 ## Components & directives
 

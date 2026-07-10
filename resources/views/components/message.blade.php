@@ -9,7 +9,8 @@
     data-src-name="{{ $srcName }}"
 >
     <div class="consent-message">
-        <button type="button" class="confirm">
+        {{-- .btn classes: the overlay button adopts the host app's button component --}}
+        <button type="button" class="confirm btn btn-primary">
             {{ __('consent-control::consent.message.button') }}
         </button>
         <p>{!! __('consent-control::consent.message.text', [

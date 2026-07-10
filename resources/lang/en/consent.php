@@ -4,7 +4,9 @@ return [
 
     'banner' => [
         'title' => 'Cookies & Services',
-        'description' => 'This website uses cookies and external services. <a href=":privacy_url">Privacy</a> · <a href=":imprint_url">Imprint</a>',
+        'description' => 'This website uses cookies and external services.',
+        'privacy_label' => 'Privacy',
+        'imprint_label' => 'Imprint',
         'settings_button' => 'More Information',
         'reset_button' => 'Delete All Cookies',
         'reset_message' => 'All cookies have been successfully deleted.',

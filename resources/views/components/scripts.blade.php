@@ -1,13 +1,22 @@
 {{--
-    Loads the consent-control runtime + standalone CSS and boots it with the
-    server-side config. Include once per page (e.g. before </body>). For a
-    Vite/bundler setup, import 'consent-control' yourself and pass :standalone-css="false".
+    Boots consent-control with the server-side config. Include once per page
+    (e.g. before </body>).
+
+    :assets="false"  – you bundle the runtime JS + CSS yourself (Vite import from
+                       the vendor dist); only the inline boot config is emitted.
+    default          – loads the published runtime + consent-message CSS from
+                       public/vendor/consent-control. Tailwind projects pass
+                       :standalone-css="false" (the banner Blade styles itself);
+                       others keep the default fallback stylesheet.
 --}}
 @once
-    @if ($standaloneCss)
-        <link rel="stylesheet" href="{{ asset('vendor/consent-control/css/consent-control.css') }}">
+    @if ($assets)
+        <link rel="stylesheet" href="{{ asset('vendor/consent-control/css/consent-message.css') }}">
+        @if ($standaloneCss)
+            <link rel="stylesheet" href="{{ asset('vendor/consent-control/css/consent-control.css') }}">
+        @endif
+        <script src="{{ asset('vendor/consent-control/js/consent-control.js') }}"></script>
     @endif
-    <script src="{{ asset('vendor/consent-control/js/consent-control.js') }}"></script>
     <script>
         (function () {
             var config = {!! \Illuminate\Support\Js::from($initConfig) !!};
@@ -39,7 +48,8 @@
                         : {
                             template: {
                                 strings: { buttonLabel: strings.button || 'OK', message: strings.text || '' },
-                                main: '<div class="consent-message"><button class="confirm">{buttonLabel}</button><p>{message}</p></div>',
+                                // .btn classes: the injected overlay button adopts the host app's button component
+                                main: '<div class="consent-message"><button class="confirm btn btn-primary">{buttonLabel}</button><p>{message}</p></div>',
                             },
                         };
 

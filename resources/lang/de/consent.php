@@ -4,7 +4,9 @@ return [
 
     'banner' => [
         'title' => 'Cookies & Dienste',
-        'description' => 'Diese Webseite nutzt Cookies und externe Dienste. <a href=":privacy_url">Datenschutz</a> · <a href=":imprint_url">Impressum</a>',
+        'description' => 'Diese Webseite nutzt Cookies und externe Dienste.',
+        'privacy_label' => 'Datenschutz',
+        'imprint_label' => 'Impressum',
         'settings_button' => 'Weitere Informationen',
         'reset_button' => 'Alle Cookies löschen',
         'reset_message' => 'Alle Cookies wurden erfolgreich gelöscht.',
