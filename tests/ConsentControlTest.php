@@ -36,6 +36,10 @@ it('renders the banner with the runtime selector contract', function () {
         ->toContain('value="necessary"');
 });
 
+it('renders the banner hidden until the runtime actively shows it', function () {
+    expect(Blade::render('<x-consent-control-banner />'))->toContain('style="display: none"');
+});
+
 it('translates category labels per locale', function () {
     app()->setLocale('en');
     expect(Blade::render('<x-consent-control-banner />'))->toContain('Necessary');

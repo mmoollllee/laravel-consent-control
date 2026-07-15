@@ -6,10 +6,16 @@
     group-[.is-collapsed]/[&.hide]. Buttons use the host app's .btn component
     classes. Projects without Tailwind load the small fallback stylesheet instead
     (see <x-consent-control-scripts :standalone-css="true" />).
+
+    Ships with an inline display:none so it can never flash before CSS/JS load
+    (Vite dev server, late stylesheet, cached pages): visibility is JS-only —
+    the runtime's show() clears the inline style (missing/stale consent on boot,
+    reopen buttons) and only then animates via the `hide` class.
 --}}
 <div
     id="consent-control-banner"
     class="group hide is-collapsed flex flex-col gap-2 fixed bottom-0 right-0 z-[9999] w-full max-w-md overflow-auto rounded-md bg-white text-center text-sm text-gray-800 shadow-lg transition-all duration-500 sm:bottom-4 sm:right-4 sm:w-[calc(100%-2rem)] sm:max-w-lg [&.is-collapsed]:max-w-xs! [&.hide.is-collapsed]:translate-x-[calc(100%+2rem)]"
+    style="display: none"
     role="dialog"
     aria-modal="true"
     aria-label="{{ __('consent-control::consent.banner.title') }}"

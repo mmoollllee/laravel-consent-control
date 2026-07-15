@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-consent-control` will be documented in this file.
 
+## 0.1.2 - 2026-07-15
+
+No more banner flash for returning visitors (requires
+[`consent-control`](https://github.com/mmoollllee/consent-control) > 2.1.0).
+
+- `<x-consent-control-banner>` now ships with an inline `display:none`;
+  visibility is JS-only (the runtime shows it on missing/stale consent and via
+  reopen buttons). Previously the hidden state depended on the (Tailwind or
+  fallback) stylesheet, so the banner could flash on load even though consent
+  was already given (Vite dev server, late-loading stylesheet, cached pages).
+  Side benefit: the hidden banner no longer sits focusable off-screen in the
+  tab order.
+- Bundled runtime updated: `ConsentControl.show()` clears the inline style
+  (with a reflow) so the slide-in transition still runs.
+
 ## 0.1.1 - 2026-07-10
 
 Site-inheriting banner and a bring-your-own-bundle asset path (requires
