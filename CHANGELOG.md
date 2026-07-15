@@ -2,10 +2,10 @@
 
 All notable changes to `laravel-consent-control` will be documented in this file.
 
-## 0.1.2 - 2026-07-15
+## 0.1.3 - 2026-07-15
 
-No more banner flash for returning visitors (requires
-[`consent-control`](https://github.com/mmoollllee/consent-control) > 2.1.0).
+No more banner flash for returning visitors (ships
+[`consent-control`](https://github.com/mmoollllee/consent-control) 2.1.1).
 
 - `<x-consent-control-banner>` now ships with an inline `display:none`;
   visibility is JS-only (the runtime shows it on missing/stale consent and via
@@ -16,6 +16,11 @@ No more banner flash for returning visitors (requires
   tab order.
 - Bundled runtime updated: `ConsentControl.show()` clears the inline style
   (with a reflow) so the slide-in transition still runs.
+
+## 0.1.2 - 2026-07-13
+
+- Allow Laravel 13 (`illuminate/contracts` + `illuminate/support`
+  `^11.28|^12.0|^13.0`).
 
 ## 0.1.1 - 2026-07-10
 
