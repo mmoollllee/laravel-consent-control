@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-consent-control` will be documented in this file.
 
+## 0.1.4 - 2026-08-21
+
+Bundled runtime updated to
+[`consent-control`](https://github.com/mmoollllee/consent-control) 2.1.2.
+
+- The runtime now exposes `setConsentControlCookie()` — as a module export and
+  on `window` — alongside the getters it already published. Integrations that
+  grant consent without rendering a banner (native shells such as Tauri or
+  Electron, kiosk displays) no longer have to hand-write `document.cookie`,
+  which duplicated the cookie options and silently skipped the
+  `{cookieName}-v` version cookie.
+
 ## 0.1.3 - 2026-07-15
 
 No more banner flash for returning visitors (ships
