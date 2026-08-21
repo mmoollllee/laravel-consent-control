@@ -81,3 +81,30 @@ it('renders a consent-gated script tag', function () {
         ->toContain('data-consent="analytics"')
         ->toContain('src="https://example.com/a.js"');
 });
+
+it('keeps a cookie domain the current host belongs to', function () {
+    config()->set('consent-control.cookie.domain', 'example.com');
+
+    // Apex and subdomain both sit under the configured domain, so the widening
+    // to cross-subdomain consent is preserved.
+    foreach (['example.com', 'www.example.com'] as $host) {
+        app('request')->headers->set('host', $host);
+
+        expect((new Scripts)->initConfig['cookieDomain'])->toBe('example.com');
+    }
+});
+
+it('drops a cookie domain the current host is not part of', function () {
+    // One Laravel serving many customer domains: app.url has nothing to do with
+    // the request host, and a pinned domain would be rejected by the browser.
+    config()->set('consent-control.cookie.domain', 'nest.example.com');
+    app('request')->headers->set('host', 'cam5.customer.test');
+
+    expect((new Scripts)->initConfig['cookieDomain'])->toBeNull();
+});
+
+it('emits no cookie domain when none is configured', function () {
+    config()->set('consent-control.cookie.domain', null);
+
+    expect((new Scripts)->initConfig['cookieDomain'])->toBeNull();
+});

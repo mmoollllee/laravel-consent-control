@@ -61,7 +61,7 @@ class Scripts extends Component
             'version' => config('consent-control.version'),
             'cookieName' => $cookie['name'] ?? 'consentcontrol',
             'cookieDays' => (int) ($cookie['days'] ?? 365),
-            'cookieDomain' => $cookie['domain'] ?? null,
+            'cookieDomain' => $this->resolveCookieDomain($cookie['domain'] ?? null),
             'cookiePath' => $cookie['path'] ?? '/',
             'cookieSameSite' => $cookie['same_site'] ?? 'lax',
             'cookieSecure' => (bool) ($cookie['secure'] ?? false),
@@ -78,6 +78,35 @@ class Scripts extends Component
                 ]),
             ],
         ];
+    }
+
+    /**
+     * A cookie domain the current host is not part of is rejected by the
+     * browser outright, so consent would never persist. The shipped default
+     * derives the domain from `app.url`, which is correct for a single-site
+     * app but wrong for one Laravel serving many customer domains: there the
+     * request host has nothing to do with `app.url`. Drop the domain in that
+     * case and let the runtime scope the cookie to the request host instead.
+     *
+     * An explicit, matching domain is kept, so opting into cross-subdomain
+     * consent (`example.com` covering `www.example.com`) keeps working.
+     */
+    protected function resolveCookieDomain(?string $domain): ?string
+    {
+        if (blank($domain)) {
+            return null;
+        }
+
+        $domain = ltrim($domain, '.');
+        $host = request()?->getHost();
+
+        if (blank($host)) {
+            return $domain;
+        }
+
+        return $host === $domain || str_ends_with($host, '.'.$domain)
+            ? $domain
+            : null;
     }
 
     public function render()

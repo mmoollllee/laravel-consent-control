@@ -45,6 +45,18 @@ return [
     |--------------------------------------------------------------------------
     | Cookie Settings
     |--------------------------------------------------------------------------
+    |
+    | 'domain' widens the consent cookie to a domain and all its subdomains, so
+    | one consent covers example.com and www.example.com. It defaults to the
+    | host of app.url.
+    |
+    | Multi-domain apps — one Laravel serving many customer domains — must NOT
+    | pin a domain: a browser rejects a cookie for a domain the current host is
+    | not part of, and consent would never persist. Set CONSENT_COOKIE_DOMAIN
+    | to an empty value there and the cookie is scoped to the request host.
+    | As a safety net, a domain that does not match the current host is dropped
+    | at render time rather than emitted.
+    |
     */
     'cookie' => [
         'name' => env('CONSENT_COOKIE_NAME', 'consentcontrol'),

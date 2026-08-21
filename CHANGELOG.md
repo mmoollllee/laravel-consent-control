@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-consent-control` will be documented in this file.
 
+## 0.1.5 - 2026-08-21
+
+- Multi-domain apps no longer lose consent. A configured cookie domain that the
+  current request host is not part of is now dropped at render time instead of
+  being handed to the runtime, where the browser rejects the cookie outright and
+  consent never persists. The shipped default derives the domain from `app.url`,
+  which is right for a single-site app but wrong for one Laravel serving many
+  customer domains. An explicit, *matching* domain is still emitted, so opting
+  into cross-subdomain consent (`example.com` covering `www.example.com`) is
+  unchanged.
+- `config/consent-control.php` documents the multi-domain case on the `cookie`
+  block.
+- README: the package supports Laravel 13 — `composer.json` already allowed it.
+
 ## 0.1.4 - 2026-08-21
 
 Bundled runtime updated to

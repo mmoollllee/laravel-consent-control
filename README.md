@@ -28,7 +28,7 @@ A single config file is all you need — no database, no admin panel required.
 ## Requirements
 
 - PHP 8.2+
-- Laravel 11.28+ / 12
+- Laravel 11.28+ / 12 / 13
 
 ## Installation
 
